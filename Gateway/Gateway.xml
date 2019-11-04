@@ -1,0 +1,168 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Gateway</name>
+    </assembly>
+    <members>
+        <member name="T:Gateway.Configuration.ReRouteOptions">
+            <summary>
+            Ocelot ReRoute configuration.
+            </summary>
+        </member>
+        <member name="P:Gateway.Configuration.ReRouteOptions.SwaggerKey">
+            <summary>
+            Swagger key. This key is used for generating swagger documentation for downstream services.
+            The same key have to be in <see cref="T:Gateway.Configuration.SwaggerEndPointOptions"/> collection.
+            </summary>
+        </member>
+        <member name="P:Gateway.Configuration.ReRouteOptions.DownstreamPathTemplate">
+            <summary>
+            Gets or sets the downstream path template.
+            </summary>
+        </member>
+        <member name="P:Gateway.Configuration.ReRouteOptions.UpstreamPathTemplate">
+            <summary>
+            Gets or sets the upstream path template.
+            </summary>
+        </member>
+        <member name="P:Gateway.Configuration.ReRouteOptions.VirtualDirectory">
+            <summary>
+            Gets or sets the virtual directory, where is host service.
+            </summary>
+            <remarks>Default value is <see langword="null"/>.</remarks>
+        </member>
+        <member name="P:Gateway.Configuration.ReRouteOptions.DownstreamPath">
+            <summary>
+            Gets the downstream path.
+            </summary>
+        </member>
+        <member name="P:Gateway.Configuration.ReRouteOptions.UpstreamPath">
+            <summary>
+            Gets the upstream path.
+            </summary>
+        </member>
+        <member name="T:Gateway.Configuration.SwaggerEndPointOptions">
+            <summary>
+            Swagger endpoint configuration.
+            </summary>
+        </member>
+        <member name="F:Gateway.Configuration.SwaggerEndPointOptions.ConfigurationSectionName">
+            <summary>
+            The configuration section name.
+            </summary>
+        </member>
+        <member name="P:Gateway.Configuration.SwaggerEndPointOptions.Key">
+            <summary>
+            Swagger endpoint key, which have to corresponding with <see cref="P:Gateway.Configuration.ReRouteOptions.SwaggerKey"/>.
+            </summary>
+        </member>
+        <member name="P:Gateway.Configuration.SwaggerEndPointOptions.KeyToPath">
+            <summary>
+            Gets the path from key.
+            </summary>
+        </member>
+        <member name="P:Gateway.Configuration.SwaggerEndPointOptions.Name">
+            <summary>
+            End point name. This name is displayed in Swagger UI page.
+            </summary>
+        </member>
+        <member name="P:Gateway.Configuration.SwaggerEndPointOptions.Url">
+            <summary>
+            Full url to downstream service swagger endpoint.
+            </summary>
+            <example>http://localhost:5100/swagger/v1/swagger.json</example>
+        </member>
+        <member name="T:Gateway.Configuration.SwaggerForOCelotUIOptions">
+            <summary>
+            Configuration for Swagger UI.
+            </summary>
+            <seealso cref="T:Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIOptions" />
+        </member>
+        <member name="P:Gateway.Configuration.SwaggerForOCelotUIOptions.EndPointBasePath">
+            <summary>
+            The end point base path. The final path to swagger endpoint is
+            <see cref="P:Gateway.Configuration.SwaggerForOCelotUIOptions.EndPointBasePath"/> + <see cref="P:Gateway.Configuration.SwaggerEndPointOptions.Key"/>
+            </summary>
+        </member>
+        <member name="T:Gateway.Configuration.Transformation.ISwaggerJsonTransformer">
+            <summary>
+            Interface which describe class for transformation downstream service swagger json into upstream format.
+            </summary>
+        </member>
+        <member name="M:Gateway.Configuration.Transformation.ISwaggerJsonTransformer.Transform(System.String,System.Collections.Generic.IEnumerable{Gateway.Configuration.ReRouteOptions})">
+            <summary>
+            Transforms downstream swagger json into upstream format.
+            </summary>
+            <param name="swaggerJson">The swagger json.</param>
+            <param name="reRoutes">The re routes.</param>
+            <returns>
+            Transformed swagger json.
+            </returns>
+        </member>
+        <member name="T:Gateway.Configuration.Transformation.SwaggerJsonTransformer">
+            <summary>
+            Class which implement transformation downstream service swagger json into upstream format
+            </summary>
+            <seealso cref="!:MMLib.SwaggerForOcelot.Transformation.ISwaggerJsonTransformer" />
+        </member>
+        <member name="M:Gateway.Configuration.Transformation.SwaggerJsonTransformer.Transform(System.String,System.Collections.Generic.IEnumerable{Gateway.Configuration.ReRouteOptions})">
+            <inheritdoc/>
+        </member>
+        <member name="M:Gateway.Extensions.ServiceCollectionExtensions.AddSwaggerForOcelot(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Adds configuration for for <see cref="!:SwaggerForOcelotMiddleware"/> into <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.
+            </summary>
+            <param name="services">The services.</param>
+            <param name="configuration">The configuration.</param>
+            <returns><see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/></returns>
+        </member>
+        <member name="T:Gateway.Middleware.BuilderExtensions">
+            <summary>
+            Extensions for adding <see cref="T:Gateway.Middleware.SwaggerForOcelotMiddleware"/> into application pipeline.
+            </summary>
+        </member>
+        <member name="M:Gateway.Middleware.BuilderExtensions.UseSwaggerForOcelotUI(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.Extensions.Configuration.IConfiguration,Swagger.API.InnerSaceAPI)">
+            <summary>
+            Add Swagger generator for downstream services and UI into application pipeline.
+            </summary>
+            <param name="app">The application builder.</param>
+            <param name="configuration">The configuration.</param>
+            <returns>
+            <see cref="T:Microsoft.AspNetCore.Builder.IApplicationBuilder"/>.
+            </returns>
+        </member>
+        <member name="M:Gateway.Middleware.BuilderExtensions.UseSwaggerForOcelotUI(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.Extensions.Configuration.IConfiguration,System.Action{Gateway.Configuration.SwaggerForOCelotUIOptions},Swagger.API.InnerSaceAPI)">
+            <summary>
+            Add Swagger generator for downstream services and UI into application pipeline.
+            </summary>
+            <param name="app">The application builder.</param>
+            <param name="configuration">The configuration.</param>
+            <param name="setupAction">Setup <see cref="T:Gateway.Configuration.SwaggerForOCelotUIOptions"/></param>
+            <returns>
+            <see cref="T:Microsoft.AspNetCore.Builder.IApplicationBuilder"/>.
+            </returns>
+        </member>
+        <member name="T:Gateway.Middleware.SwaggerForOcelotMiddleware">
+            <summary>
+            Swagger for Ocelot middleware.
+            This middleware generate swagger documentation from downstream services for SwaggerUI.
+            </summary>
+        </member>
+        <member name="M:Gateway.Middleware.SwaggerForOcelotMiddleware.#ctor(Microsoft.AspNetCore.Http.RequestDelegate,Gateway.Configuration.SwaggerForOCelotUIOptions,Microsoft.Extensions.Options.IOptions{System.Collections.Generic.List{Gateway.Configuration.ReRouteOptions}},Microsoft.Extensions.Options.IOptions{System.Collections.Generic.List{Gateway.Configuration.SwaggerEndPointOptions}},System.Net.Http.IHttpClientFactory,Gateway.Configuration.Transformation.ISwaggerJsonTransformer)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Gateway.Middleware.SwaggerForOcelotMiddleware"/> class.
+            </summary>
+            <param name="next">The next delegate.</param>
+            <param name="options">The options.</param>
+            <param name="reRoutes">The Ocelot ReRoutes configuration.</param>
+            <param name="swaggerEndPoints">The swagger end points.</param>
+            <param name="httpClientFactory">The HTTP client factory.</param>
+        </member>
+        <member name="M:Gateway.Middleware.SwaggerForOcelotMiddleware.Invoke(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            Invokes the specified context.
+            </summary>
+            <param name="context">The context.</param>
+        </member>
+    </members>
+</doc>

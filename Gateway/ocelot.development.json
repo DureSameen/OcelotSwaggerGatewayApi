@@ -1,0 +1,125 @@
+﻿{
+  "ReRoutes": [
+    // Authentication Routes
+    {
+      "DownstreamPathTemplate": "/api/user/",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 52792
+        }
+      ],
+      "UpstreamPathTemplate": "/api/user/",
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "usersvc",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ID4",
+        "AllowedScopes": [ "user_read_only" ]
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/user/getbyid/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 52792
+        }
+      ],
+      "UpstreamPathTemplate": "/api/user/getbyid/{id}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "Key": "user-profile",
+      "SwaggerKey": "usersvc",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ID4",
+        "AllowedScopes": [ "user_read_only" ]
+      }
+    },
+    // Catalog Routes
+    {
+      "DownstreamPathTemplate": "/api/product/",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 52791
+        }
+      ],
+      "UpstreamPathTemplate": "/api/product/",
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "catalogsvc",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ID4",
+        "AllowedScopes": [ "catalog_read_only" ]
+      }
+    },
+    // Transaction Routess
+    {
+      "DownstreamPathTemplate": "/api/transaction/",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 52790
+        }
+      ],
+      "UpstreamPathTemplate": "/api/transaction/",
+      "UpstreamHttpMethod": [ "Get" ],
+      "SwaggerKey": "ledgersvc",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ID4",
+        "AllowedScopes": [ "ledger_read_only" ]
+      }
+    },
+    {
+      "DownstreamPathTemplate": "/api/transaction/getbyuserid/{id}",
+      "DownstreamScheme": "http",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 52790
+        }
+      ],
+      "UpstreamPathTemplate": "/api/transaction/getbyuserid/{id}",
+      "UpstreamHttpMethod": [ "Get" ],
+      "Key": "user-transactions",
+      "SwaggerKey": "ledgersvc",
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "ID4",
+        "AllowedScopes": [ "ledger_read_only" ]
+      }
+    }
+  ],
+  //"Aggregates": [
+  //  {
+  //    "ReRouteKeys": [
+  //      "user-transactions",
+  //      "user-profile"
+  //    ],
+  //    "UpstreamPathTemplate": "/api/user-transactions/{id}"
+  //  }
+  //],
+
+  "SwaggerEndPoints": [
+    {
+      "Key": "usersvc",
+      "Name": "User API",
+      "Url": "http://localhost:52792"
+    },
+    {
+      "Key": "catalogsvc",
+      "Name": "catalog API",
+      "Url": "http://localhost:52791"
+    },
+
+    {
+      "Key": "ledgersvc",
+      "Name": "Ledger API",
+      "Url": "http://localhost:52790"
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://localhost:59714"
+  }
+}
