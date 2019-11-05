@@ -1,5 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Xml.XPath;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace Swashbuckle.AspNetCore.SwaggerGen
 {
@@ -7,7 +14,7 @@ namespace Swashbuckle.AspNetCore.SwaggerGen
     {
         public SwaggerGeneratorOptions SwaggerGeneratorOptions { get; set; } = new SwaggerGeneratorOptions();
 
-        public SchemaGeneratorOptions SchemaGeneratorOptions { get; set; } = new SchemaGeneratorOptions();
+        public SchemaRegistryOptions SchemaRegistryOptions { get; set; } = new SchemaRegistryOptions();
 
         // NOTE: Filter instances can be added directly to the options exposed above OR they can be specified in
         // the following lists. In the latter case, they will be instantiated and added when options are injected

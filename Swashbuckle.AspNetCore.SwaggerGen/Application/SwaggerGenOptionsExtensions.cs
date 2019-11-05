@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Xml.XPath;
-using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Swashbuckle.AspNetCore.Swagger;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -18,7 +18,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static void SwaggerDoc(
             this SwaggerGenOptions swaggerGenOptions,
             string name,
-            OpenApiInfo info)
+            Info info)
         {
             swaggerGenOptions.SwaggerGeneratorOptions.SwaggerDocs.Add(name, info);
         }
@@ -55,18 +55,6 @@ namespace Microsoft.Extensions.DependencyInjection
             Func<IEnumerable<ApiDescription>, ApiDescription> resolver)
         {
             swaggerGenOptions.SwaggerGeneratorOptions.ConflictingActionsResolver = resolver;
-        }
-
-        [Obsolete("If the serializer is configured for string enums (e.g. StringEnumConverter) Swashbuckle will reflect that automatically")]
-        public static void DescribeAllEnumsAsStrings(this SwaggerGenOptions swaggerGenOptions)
-        {
-            swaggerGenOptions.SchemaGeneratorOptions.DescribeAllEnumsAsStrings = true;
-        }
-
-        [Obsolete("If the serializer is configured for (camel-cased) string enums (e.g. StringEnumConverter) Swashbuckle will reflect that automatically")]
-        public static void DescribeStringEnumsInCamelCase(this SwaggerGenOptions swaggerGenOptions)
-        {
-            swaggerGenOptions.SchemaGeneratorOptions.DescribeStringEnumsInCamelCase = true;
         }
 
         /// <summary>
@@ -135,24 +123,24 @@ namespace Microsoft.Extensions.DependencyInjection
         public static void AddSecurityDefinition(
             this SwaggerGenOptions swaggerGenOptions,
             string name,
-            OpenApiSecurityScheme securityScheme)
+            SecurityScheme securityScheme)
         {
-            swaggerGenOptions.SwaggerGeneratorOptions.SecuritySchemes.Add(name, securityScheme);
+            swaggerGenOptions.SwaggerGeneratorOptions.SecurityDefinitions.Add(name, securityScheme);
         }
 
         /// <summary>
         /// Adds a global security requirement
         /// </summary>
         /// <param name="swaggerGenOptions"></param>
-        /// <param name="securityRequirement">
+        /// <param name="requirement">
         /// A dictionary of required schemes (logical AND). Keys must correspond to schemes defined through AddSecurityDefinition
         /// If the scheme is of type "oauth2", then the value is a list of scopes, otherwise it MUST be an empty array
         /// </param>
         public static void AddSecurityRequirement(
             this SwaggerGenOptions swaggerGenOptions,
-            OpenApiSecurityRequirement securityRequirement)
+            IDictionary<string, IEnumerable<string>> requirement)
         {
-            swaggerGenOptions.SwaggerGeneratorOptions.SecurityRequirements.Add(securityRequirement);
+            swaggerGenOptions.SwaggerGeneratorOptions.SecurityRequirements.Add(requirement);
         }
 
         /// <summary>
@@ -164,9 +152,9 @@ namespace Microsoft.Extensions.DependencyInjection
         public static void MapType(
             this SwaggerGenOptions swaggerGenOptions,
             Type type,
-            Func<OpenApiSchema> schemaFactory)
+            Func<Schema> schemaFactory)
         {
-            swaggerGenOptions.SchemaGeneratorOptions.CustomTypeMappings.Add(type, schemaFactory);
+            swaggerGenOptions.SchemaRegistryOptions.CustomTypeMappings.Add(type, schemaFactory);
         }
 
         /// <summary>
@@ -177,9 +165,33 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <param name="schemaFactory">A factory method that generates Schema's for the provided type</param>
         public static void MapType<T>(
             this SwaggerGenOptions swaggerGenOptions,
-            Func<OpenApiSchema> schemaFactory)
+            Func<Schema> schemaFactory)
         {
             swaggerGenOptions.MapType(typeof(T), schemaFactory);
+        }
+
+        /// <summary>
+        /// Use the enum names, as opposed to their integer values, when describing enum types
+        /// </summary>
+        public static void DescribeAllEnumsAsStrings(this SwaggerGenOptions swaggerGenOptions)
+        {
+            swaggerGenOptions.SchemaRegistryOptions.DescribeAllEnumsAsStrings = true;
+        }
+
+        /// <summary>
+        /// If applicable, describe all enum names, regardless of how they appear in code, in camelCase.
+        /// </summary>
+        public static void DescribeStringEnumsInCamelCase(this SwaggerGenOptions swaggerGenOptions)
+        {
+            swaggerGenOptions.SchemaRegistryOptions.DescribeStringEnumsInCamelCase = true;
+        }
+
+        /// <summary>
+        /// Use referenced definitions for enum types within body parameter and response schemas
+        /// </summary>
+        public static void UseReferencedDefinitionsForEnums(this SwaggerGenOptions swaggerGenOptions)
+        {
+            swaggerGenOptions.SchemaRegistryOptions.UseReferencedDefinitionsForEnums = true;
         }
 
         /// <summary>
@@ -193,7 +205,7 @@ namespace Microsoft.Extensions.DependencyInjection
             this SwaggerGenOptions swaggerGenOptions,
             Func<Type, string> schemaIdSelector)
         {
-            swaggerGenOptions.SchemaGeneratorOptions.SchemaIdSelector = schemaIdSelector;
+            swaggerGenOptions.SchemaRegistryOptions.SchemaIdSelector = schemaIdSelector;
         }
 
         /// <summary>
@@ -201,20 +213,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// </summary>
         public static void IgnoreObsoleteProperties(this SwaggerGenOptions swaggerGenOptions)
         {
-            swaggerGenOptions.SchemaGeneratorOptions.IgnoreObsoleteProperties = true;
-        }
-
-        /// <summary>
-        /// Generate polymorphic schemas (i.e. "oneOf") based on discovered subtypes
-        /// </summary>
-        /// <param name="swaggerGenOptions"></param>
-        /// <param name="subTypesResolver"></param>
-        public static void GeneratePolymorphicSchemas(this SwaggerGenOptions swaggerGenOptions, Func<Type, IEnumerable<Type>> subTypesResolver = null)
-        {
-            swaggerGenOptions.SchemaGeneratorOptions.GeneratePolymorphicSchemas = true;
-
-            if (subTypesResolver != null)
-                swaggerGenOptions.SchemaGeneratorOptions.SubTypesResolver = subTypesResolver;
+            swaggerGenOptions.SchemaRegistryOptions.IgnoreObsoleteProperties = true;
         }
 
         /// <summary>

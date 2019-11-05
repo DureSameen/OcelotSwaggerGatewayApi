@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Xml.XPath;
+using System.Reflection;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
-using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace Swashbuckle.AspNetCore.SwaggerGen
 {
@@ -23,7 +24,7 @@ namespace Swashbuckle.AspNetCore.SwaggerGen
             _xmlNavigator = xmlDoc.CreateNavigator();
         }
 
-        public void Apply(OpenApiOperation operation, OperationFilterContext context)
+        public void Apply(Operation operation, OperationFilterContext context)
         {
             if (context.MethodInfo == null) return;
 
@@ -34,24 +35,14 @@ namespace Swashbuckle.AspNetCore.SwaggerGen
 
             if (targetMethod == null) return;
 
-            var typeMemberName = XmlCommentsNodeNameHelper.GetMemberNameForType(targetMethod.DeclaringType);
-            var typeNode = _xmlNavigator.SelectSingleNode(string.Format(MemberXPath, typeMemberName));
+            var memberName = XmlCommentsMemberNameHelper.GetMemberNameForMethod(targetMethod);
+            var methodNode = _xmlNavigator.SelectSingleNode(string.Format(MemberXPath, memberName));
 
-            // Apply controller-level tags if any
-            if (typeNode != null)
-            {
-                ApplyResponsesXmlToResponses(operation.Responses, typeNode.Select(ResponsesXPath));
-            }
-
-            var methodMemberName = XmlCommentsNodeNameHelper.GetMemberNameForMethod(targetMethod);
-            var methodNode = _xmlNavigator.SelectSingleNode(string.Format(MemberXPath, methodMemberName));
-
-            // Apply method-level tags
             if (methodNode != null)
             {
                 ApplyMethodXmlToOperation(operation, methodNode);
-                ApplyParamsXmlToActionParameters(operation.Parameters, operation.RequestBody, context.ApiDescription, methodNode);
-                ApplyResponsesXmlToResponses(operation.Responses, methodNode.Select(ResponsesXPath)); // will override controller-level response tags
+                ApplyParamsXmlToActionParameters(operation.Parameters, methodNode, context.ApiDescription);
+                ApplyResponsesXmlToResponses(operation.Responses, methodNode.Select(ResponsesXPath));
             }
 
             // Special handling for parameters that are bound to model properties
@@ -76,7 +67,7 @@ namespace Swashbuckle.AspNetCore.SwaggerGen
             return (candidateMethods.Count() == 1) ? candidateMethods.First() : null;
         }
 
-        private void ApplyMethodXmlToOperation(OpenApiOperation operation, XPathNavigator methodNode)
+        private void ApplyMethodXmlToOperation(Operation operation, XPathNavigator methodNode)
         {
             var summaryNode = methodNode.SelectSingleNode(SummaryXPath);
             if (summaryNode != null)
@@ -88,10 +79,9 @@ namespace Swashbuckle.AspNetCore.SwaggerGen
         }
 
         private void ApplyParamsXmlToActionParameters(
-            IList<OpenApiParameter> parameters,
-            OpenApiRequestBody requestBody,
-            ApiDescription apiDescription,
-            XPathNavigator methodNode)
+            IList<IParameter> parameters,
+            XPathNavigator methodNode,
+            ApiDescription apiDescription)
         {
             if (parameters == null) return;
 
@@ -107,36 +97,23 @@ namespace Swashbuckle.AspNetCore.SwaggerGen
                 if (paramNode != null)
                     parameter.Description = XmlCommentsTextHelper.Humanize(paramNode.InnerXml);
             }
-
-            if (requestBody != null)
-            {
-                var actionParameter = apiDescription.ParameterDescriptions
-                    .FirstOrDefault(p => p.IsFromBody());
-
-                if (actionParameter != null)
-                {
-                    var paramNode = methodNode.SelectSingleNode(string.Format(ParamXPath, actionParameter.Name));
-                    if (paramNode != null)
-                        requestBody.Description = XmlCommentsTextHelper.Humanize(paramNode.InnerXml);
-                }
-            }
         }
 
-        private void ApplyResponsesXmlToResponses(IDictionary<string, OpenApiResponse> responses, XPathNodeIterator responseNodes)
+        private void ApplyResponsesXmlToResponses(IDictionary<string, Response> responses, XPathNodeIterator responseNodes)
         {
             while (responseNodes.MoveNext())
             {
                 var code = responseNodes.Current.GetAttribute("code", "");
                 var response = responses.ContainsKey(code)
                     ? responses[code]
-                    : responses[code] = new OpenApiResponse();
+                    : responses[code] = new Response();
 
                 response.Description = XmlCommentsTextHelper.Humanize(responseNodes.Current.InnerXml);
             }
         }
 
         private void ApplyPropertiesXmlToPropertyParameters(
-            IList<OpenApiParameter> parameters,
+            IList<IParameter> parameters,
             ApiDescription apiDescription)
         {
             if (parameters == null) return;
@@ -153,7 +130,7 @@ namespace Swashbuckle.AspNetCore.SwaggerGen
                 var memberInfo = metadata.ContainerType.GetMember(metadata.PropertyName).FirstOrDefault();
                 if (memberInfo == null) continue;
 
-                var memberName = XmlCommentsNodeNameHelper.GetNodeNameForMember(memberInfo);
+                var memberName = XmlCommentsMemberNameHelper.GetMemberNameForMember(memberInfo);
                 var memberNode = _xmlNavigator.SelectSingleNode(string.Format(MemberXPath, memberName));
                 if (memberNode == null) continue;
 
