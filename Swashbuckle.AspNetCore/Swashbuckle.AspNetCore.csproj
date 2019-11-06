@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  
+
+  <PropertyGroup>
+    <Description>Swagger tools for documenting APIs built on ASP.NET Core</Description>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyName>Swashbuckle.AspNetCore</AssemblyName>
+    <PackageId>Swashbuckle.AspNetCore</PackageId>
+    <PackageTags>swagger;documentation;discovery;help;webapi;aspnet;aspnetcore</PackageTags>
+    <PackageProjectUrl>https://github.com/domaindrivendev/Swashbuckle.AspNetCore</PackageProjectUrl>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/domaindrivendev/Swashbuckle.AspNetCore/master/LICENSE</PackageLicenseUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/domaindrivendev/Swashbuckle.AspNetCore.git</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Swashbuckle.AspNetCore.SwaggerGen\Swashbuckle.AspNetCore.SwaggerGen.csproj" />
+    <ProjectReference Include="..\Swashbuckle.AspNetCore.SwaggerUI\Swashbuckle.AspNetCore.SwaggerUI.csproj" />
+    <ProjectReference Include="..\Swashbuckle.AspNetCore.Swagger\Swashbuckle.AspNetCore.Swagger.csproj" />
+  </ItemGroup>
+
+</Project>

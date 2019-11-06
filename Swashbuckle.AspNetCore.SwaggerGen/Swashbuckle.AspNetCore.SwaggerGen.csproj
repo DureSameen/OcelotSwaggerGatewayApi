@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <Import Project="..\..\version.props" />
+  
 
   <PropertyGroup>
     <Description>Swagger Generator for API's built on ASP.NET Core</Description>
