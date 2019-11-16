@@ -6,9 +6,13 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\**" />
+    <Compile Remove="Models\**" />
     <Content Remove="Controllers\**" />
+    <Content Remove="Models\**" />
     <EmbeddedResource Remove="Controllers\**" />
+    <EmbeddedResource Remove="Models\**" />
     <None Remove="Controllers\**" />
+    <None Remove="Models\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -49,6 +53,16 @@
 
   <ItemGroup>
     <PackageReference Include="IdentityServer4" Version="3.0.2" />
+    <PackageReference Include="IdentityServer4.AspNetIdentity" Version="3.0.2" />
+    <PackageReference Include="IdentityServer4.EntityFramework" Version="3.0.2" />
+    <PackageReference Include="IdentityServer4.EntityFramework.Storage" Version="3.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.0.0" />
   </ItemGroup>
 
 </Project>

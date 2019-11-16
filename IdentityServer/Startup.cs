@@ -1,11 +1,14 @@
-using IdentityServer4.Models;
-using InnerSpace.IdentityServer.Models;
+using System.Reflection;
+using IdentityServer.Data;
+using IdentityServer4.Models; 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Resources = InnerSpace.IdentityServer.Models.Resources;
+ 
 
 namespace InnerSpace.IdentityServer
 {
@@ -22,18 +25,40 @@ namespace InnerSpace.IdentityServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddIdentityServer()
-                .AddInMemoryClients(Clients.Get())
-                .AddInMemoryIdentityResources(Resources.GetIdentityResources())
-                .AddInMemoryApiResources(Resources.GetApiResources())
-                .AddTestUsers(Users.Get())
-                .AddDeveloperSigningCredential();
 
+            string connectionStringIdentity =
+                            Configuration.GetConnectionString("ConnectionStringIdentity");
+            string connectionString = Configuration.GetConnectionString("ConnectionStringConfiguration");
+
+            var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
+
+            services.AddDbContext<ApplicationDbContext>(builder =>
+            builder.UseSqlServer(connectionStringIdentity, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)));
+
+            services.AddIdentity<IdentityUser, IdentityRole>().AddRoles<IdentityRole>()
+                 .AddEntityFrameworkStores<ApplicationDbContext>()
+                 .AddDefaultUI()
+                 .AddDefaultTokenProviders();
+
+             services.AddIdentityServer().AddDeveloperSigningCredential()
+                
+               .AddOperationalStore(options =>
+               {
+                   options.ConfigureDbContext = builder => builder.UseSqlServer(connectionString ,sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly));
+                    
+                   options.EnableTokenCleanup = true;
+                   options.TokenCleanupInterval = 30;  
+               }).AddConfigurationStore(options =>
+                         options.ConfigureDbContext = builder =>
+                         builder.UseSqlServer(connectionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)))
+               .AddAspNetIdentity<IdentityUser>();
+
+            
             services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
         {
             if (env.IsDevelopment())
             {
@@ -56,7 +81,8 @@ namespace InnerSpace.IdentityServer
                    .AllowAnyHeader()
                    );
             app.UseAuthorization();
-
+            
+            ApplicationDbInitializer.SeedUsers(roleManager, userManager);
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

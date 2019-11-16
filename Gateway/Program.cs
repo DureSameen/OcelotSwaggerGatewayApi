@@ -20,6 +20,7 @@ namespace Gateway
                           .ConfigureAppConfiguration((hostingContext, config) =>
                           {
                               var env = hostingContext.HostingEnvironment;
+
                               config.AddJsonFile($"ocelot.{env.EnvironmentName}.json")
                               .AddEnvironmentVariables();
                           })

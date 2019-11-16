@@ -38,8 +38,8 @@ namespace Gateway
         {
             services.AddCors(); 
             //Add Swagger
-            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-            var baseDirectory = AppContext.BaseDirectory;
+            string xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            string baseDirectory = AppContext.BaseDirectory;
             services.AddSwagger(APIClient, InnerSaceAPI, Path.Combine(baseDirectory, xmlFile));
             services.AddSwaggerForOcelot(Configuration);
             services.AddAuthentication("ID4")
