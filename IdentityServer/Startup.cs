@@ -36,8 +36,7 @@ namespace InnerSpace.IdentityServer
             builder.UseSqlServer(connectionStringIdentity, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)));
 
             services.AddIdentity<IdentityUser, IdentityRole>().AddRoles<IdentityRole>()
-                 .AddEntityFrameworkStores<ApplicationDbContext>()
-                 .AddDefaultUI()
+                 .AddEntityFrameworkStores<ApplicationDbContext>() 
                  .AddDefaultTokenProviders();
 
              services.AddIdentityServer().AddDeveloperSigningCredential()

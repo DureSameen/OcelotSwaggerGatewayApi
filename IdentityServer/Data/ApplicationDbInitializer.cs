@@ -30,7 +30,7 @@ namespace IdentityServer.Data
                     Email = "admin@abc.com"
                 };
                 
-                IdentityResult result = userManager.CreateAsync(user, "pa$Sword123").Result;
+                IdentityResult result = userManager.CreateAsync(user, "Pa$$word123").Result;
 
                 if (result.Succeeded)
                 {
