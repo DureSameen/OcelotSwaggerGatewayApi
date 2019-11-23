@@ -14,7 +14,7 @@ namespace Authentication
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration, IHostingEnvironment env)
+        public Startup(IConfiguration configuration, IWebHostEnvironment env)
         {
             Configuration = configuration;
             InnerSaceAPI = configuration.GetSection("InnerSaceAPI").Get<InnerSaceAPI>();
@@ -50,9 +50,9 @@ namespace Authentication
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            if (env.())
             {
                 app.UseDeveloperExceptionPage();
             }
