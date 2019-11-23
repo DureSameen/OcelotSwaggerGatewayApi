@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "InnerSpace.IdentityServer": {
+    "IdentityServer.IdentityServer": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

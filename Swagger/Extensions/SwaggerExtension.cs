@@ -11,7 +11,7 @@ namespace Swagger.Extensions
         public static IServiceCollection AddSwagger(
             this IServiceCollection services,
             APIClient client,
-            InnerSaceAPI api,
+            ApiDetails api,
             string filePath
            )
         {

@@ -12,7 +12,7 @@ namespace Gateway.Extensions
     public static class ServiceCollectionExtensions
     {
         /// <summary>
-        /// Adds configuration for for <see cref="SwaggerForOcelotMiddleware"/> into <see cref="IServiceCollection"/>.
+        /// Adds configuration for for <see cref="AddSwaggerForOcelot"/> into <see cref="IServiceCollection"/>.
         /// </summary>
         /// <param name="services">The services.</param>
         /// <param name="configuration">The configuration.</param>

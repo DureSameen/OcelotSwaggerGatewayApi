@@ -1,4 +1,7 @@
 ﻿@using IdentityServer4.Extensions
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
 @{
     string name = null;
     if (!true.Equals(ViewData["signed-out"]))
@@ -12,7 +15,7 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>IdentityServer4</title>
+    <title>IdentityServer</title>
     <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
     <link rel="shortcut icon" type="image/x-icon" href="~/favicon.ico" />
     <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.css" />
@@ -31,19 +34,25 @@
                 <a href="~/">
                     <span class="navbar-brand">
                         <img src="~/icon.png" class="icon-banner">
-                        IdentityServer4
+                        IdentityServer
                     </span>
                 </a>
             </div>
 
             @if (!string.IsNullOrWhiteSpace(name))
             {
-                <ul class="nav navbar-nav">
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">@name <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a asp-action="Logout" asp-controller="Account">Logout</a></li>
-                        </ul>
+        <ul class="nav navbar-nav">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">@name <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a asp-controller="Manage" asp-action="Index">@Localizer["ManageProfile"]</a>
+                    </li>
+                    <li>
+                        <a asp-controller="Manage" asp-action="ChangePassword">@Localizer["ChangePassword"]</a>
+                    </li>
+                   <li><a asp-action="Logout" asp-controller="Account">Logout</a></li>
+                 </ul>
                     </li>
                 </ul>
             }

@@ -8,7 +8,7 @@ namespace IdentityServer.Data
 {
     public class ApplicationDbInitializer
     {
-        public static   void SeedUsers(RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
+        public static   void SeedUsers(RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
         {
             if (roleManager.FindByNameAsync("Admin").Result == null)
             {
@@ -24,7 +24,7 @@ namespace IdentityServer.Data
 
             if (userManager.FindByEmailAsync("admin@abc.com").Result == null)
             {
-                IdentityUser user = new IdentityUser
+                ApplicationUser user = new ApplicationUser
                 {
                     UserName = "admin1",
                     Email = "admin@abc.com"

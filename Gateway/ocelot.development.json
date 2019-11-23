@@ -12,11 +12,11 @@
       ],
       "UpstreamPathTemplate": "/api/user/",
       "UpstreamHttpMethod": [ "Get" ],
-      "SwaggerKey": "usersvc",
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "ID4",
-        "AllowedScopes": [ "user_read_only" ]
-      }
+      "SwaggerKey": "usersvc" 
+      //"AuthenticationOptions": {
+      //  "AuthenticationProviderKey": "ID4",
+      //  "AllowedScopes": [ "user_read_only" ]
+      //}
     },
     {
       "DownstreamPathTemplate": "/api/user/getbyid/{id}",

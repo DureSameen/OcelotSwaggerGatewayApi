@@ -1,0 +1,15 @@
+﻿@inject IViewLocalizer Localizer
+@using Microsoft.AspNetCore.Mvc.Localization
+@{
+    ViewData["Title"] = Localizer["Title"];
+    var lockoutDate = DateTimeOffset.Parse(Model);
+    var tommorowDate = DateTimeOffset.Now.AddDays(2);
+}
+@model string
+    <header>
+        <h1 class="text-danger">@ViewData["Title"]</h1>
+        @if (lockoutDate > tommorowDate)
+        { <p class="text-danger">@Localizer["Info"] Please contact website administrator.</p>}
+        else
+        { <p class="text-danger">@Localizer["Info"] Please wait until @Model</p>}
+    </header>

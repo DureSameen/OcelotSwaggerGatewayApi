@@ -17,11 +17,11 @@ namespace Authentication
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
-            InnerSaceAPI = configuration.GetSection("InnerSaceAPI").Get<InnerSaceAPI>();
+            ApiDetails = configuration.GetSection("ApiDetails").Get<ApiDetails>();
             string idpUrl = configuration.GetSection("Authentication:IdentityServerAddress")?.Value;
-            APIClient = new APIClient(InnerSaceAPI.Name + "_" + env.EnvironmentName, "secret", idpUrl);
+            APIClient = new APIClient(ApiDetails.Name + "_" + env.EnvironmentName, "secret", idpUrl);
         }
-        public InnerSaceAPI InnerSaceAPI { get; set; }
+        public ApiDetails ApiDetails { get; set; }
         public APIClient APIClient { get; set; }
         public IConfiguration Configuration { get; }
 
@@ -33,13 +33,13 @@ namespace Authentication
             string xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             string baseDirectory = AppContext.BaseDirectory;
 
-            services.AddSwagger(APIClient, InnerSaceAPI, Path.Combine(baseDirectory, xmlFile));
+            services.AddSwagger(APIClient, ApiDetails, Path.Combine(baseDirectory, xmlFile));
             services.AddAuthentication("ID4")
 
               .AddIdentityServerAuthentication("ID4", options =>
               {
                   options.RequireHttpsMetadata = false;
-                  options.ApiName = InnerSaceAPI.Name;
+                  options.ApiName = ApiDetails.Name;
                   options.Authority = APIClient.IdpUrl;
                   options.ClaimsIssuer = APIClient.IdpUrl;
                   options.SupportedTokens = SupportedTokens.Jwt;
@@ -71,9 +71,9 @@ namespace Authentication
             {
                 c.RoutePrefix = string.Empty;
                 c.InjectJavascript("swaggerinit.js");
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", InnerSaceAPI.Title);
-                c.OAuthClientId(InnerSaceAPI.ClientId);
-                c.OAuthAppName(InnerSaceAPI.Name);
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", ApiDetails.Title);
+                c.OAuthClientId(ApiDetails.ClientId);
+                c.OAuthAppName(ApiDetails.Name);
             });
             app.UseMvc();
             app.UseStaticFiles();

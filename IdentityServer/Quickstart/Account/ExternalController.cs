@@ -1,4 +1,5 @@
 using IdentityModel;
+using IdentityServer.ViewModels.Account;
 using IdentityServer4.Events;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
@@ -15,7 +16,7 @@ using System.Security.Claims;
 using System.Security.Principal;
 using System.Threading.Tasks;
 
-namespace IdentityServer4.Quickstart.UI
+namespace IdentityServer.Quickstart.UI
 {
     [SecurityHeaders]
     [AllowAnonymous]

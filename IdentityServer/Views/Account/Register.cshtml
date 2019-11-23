@@ -1,0 +1,93 @@
+﻿@inject IViewLocalizer Localizer
+@using Microsoft.AspNetCore.Mvc.Localization
+@model  IdentityServer.ViewModels.Account.RegisterViewModel
+@{
+    ViewData["Title"] = Localizer["Title"];
+}
+
+<h2>@ViewData["Title"].</h2>
+
+@await Html.PartialAsync("_ValidationSummary")
+
+<form asp-controller="Account" asp-action="Register" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+    <h4>@Localizer["SubTitle"]</h4>
+    <hr />
+    <div class="form-group">
+        <label asp-for="UserName" class="col-md-2 control-label">@Localizer["UserName"]</label>
+        <div class="col-md-10">
+            <input asp-for="UserName" class="form-control" />
+            <span asp-validation-for="UserName" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Email" class="col-md-2 control-label">@Localizer["Email"]</label>
+        <div class="col-md-10">
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Password" class="col-md-2 control-label">@Localizer["Password"]</label>
+        <div class="col-md-10">
+            <input asp-for="Password" class="form-control" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="ConfirmPassword" class="col-md-2 control-label">@Localizer["ConfirmPassword"]</label>
+        <div class="col-md-10">
+            <input asp-for="ConfirmPassword" class="form-control" />
+            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="FirstName" class="col-md-2 control-label">@Localizer["FirstName"]</label>
+        <div class="col-md-10">
+            <input asp-for="FirstName" class="form-control" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="LastName" class="col-md-2 control-label">@Localizer["LastName"]</label>
+        <div class="col-md-10">
+            <input asp-for="LastName" class="form-control" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="MobilePhone" class="col-md-2 control-label">@Localizer["MobilePhone"]</label>
+        <div class="col-md-10">
+            <input asp-for="MobilePhone" class="form-control" />
+            <span asp-validation-for="MobilePhone" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Address1" class="col-md-2 control-label">@Localizer["Address1"]</label>
+        <div class="col-md-10">
+            <input asp-for="Address1" class="form-control" />
+            <span asp-validation-for="Address1" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="form-group">
+        <label asp-for="Address2" class="col-md-2 control-label">@Localizer["Address2"]</label>
+        <div class="col-md-10">
+            <input asp-for="Address2" class="form-control" />
+            <span asp-validation-for="Address2" class="text-danger"></span>
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label asp-for="City" class="col-md-2 control-label">@Localizer["City"]</label>
+        <div class="col-md-10">
+            <input asp-for="City" class="form-control" />
+            <span asp-validation-for="City" class="text-danger"></span>
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-primary">@Localizer["Button"]</button>
+        </div>
+    </div>
+</form>

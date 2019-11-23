@@ -110,7 +110,7 @@
         </member>
         <member name="M:Gateway.Extensions.ServiceCollectionExtensions.AddSwaggerForOcelot(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
             <summary>
-            Adds configuration for for <see cref="!:SwaggerForOcelotMiddleware"/> into <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.
+            Adds configuration for for <see cref="M:Gateway.Extensions.ServiceCollectionExtensions.AddSwaggerForOcelot(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)"/> into <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.
             </summary>
             <param name="services">The services.</param>
             <param name="configuration">The configuration.</param>
@@ -121,7 +121,7 @@
             Extensions for adding <see cref="T:Gateway.Middleware.SwaggerForOcelotMiddleware"/> into application pipeline.
             </summary>
         </member>
-        <member name="M:Gateway.Middleware.BuilderExtensions.UseSwaggerForOcelotUI(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.Extensions.Configuration.IConfiguration,Swagger.API.InnerSaceAPI)">
+        <member name="M:Gateway.Middleware.BuilderExtensions.UseSwaggerForOcelotUI(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.Extensions.Configuration.IConfiguration,Swagger.API.ApiDetails)">
             <summary>
             Add Swagger generator for downstream services and UI into application pipeline.
             </summary>
@@ -131,7 +131,7 @@
             <see cref="T:Microsoft.AspNetCore.Builder.IApplicationBuilder"/>.
             </returns>
         </member>
-        <member name="M:Gateway.Middleware.BuilderExtensions.UseSwaggerForOcelotUI(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.Extensions.Configuration.IConfiguration,System.Action{Gateway.Configuration.SwaggerForOCelotUIOptions},Swagger.API.InnerSaceAPI)">
+        <member name="M:Gateway.Middleware.BuilderExtensions.UseSwaggerForOcelotUI(Microsoft.AspNetCore.Builder.IApplicationBuilder,Microsoft.Extensions.Configuration.IConfiguration,System.Action{Gateway.Configuration.SwaggerForOCelotUIOptions},Swagger.API.ApiDetails)">
             <summary>
             Add Swagger generator for downstream services and UI into application pipeline.
             </summary>

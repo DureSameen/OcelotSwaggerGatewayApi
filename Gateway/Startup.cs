@@ -25,11 +25,11 @@ namespace Gateway
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             Configuration = configuration;
-            InnerSaceAPI = configuration.GetSection("InnerSaceAPI").Get<InnerSaceAPI>();
+            ApiDetails = configuration.GetSection("ApiDetails").Get<ApiDetails>();
             string idpUrl = configuration.GetSection("Authentication:IdentityServerAddress")?.Value;
-            APIClient = new APIClient(InnerSaceAPI.Name + "_" + env.EnvironmentName, "secret", idpUrl);
+            APIClient = new APIClient(ApiDetails.Name + "_" + env.EnvironmentName, "secret", idpUrl);
         }
-        public InnerSaceAPI InnerSaceAPI { get; set; }
+        public ApiDetails ApiDetails { get; set; }
         public APIClient APIClient { get; set; }
         public IConfiguration Configuration { get; }
 
@@ -40,14 +40,14 @@ namespace Gateway
             //Add Swagger
             string xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
             string baseDirectory = AppContext.BaseDirectory;
-            services.AddSwagger(APIClient, InnerSaceAPI, Path.Combine(baseDirectory, xmlFile));
+            services.AddSwagger(APIClient, ApiDetails, Path.Combine(baseDirectory, xmlFile));
             services.AddSwaggerForOcelot(Configuration);
             services.AddAuthentication("ID4")
 
            .AddIdentityServerAuthentication("ID4", options =>
            {
                options.RequireHttpsMetadata = false;
-               options.ApiName = InnerSaceAPI.Name;
+               options.ApiName = ApiDetails.Name;
                options.Authority = APIClient.IdpUrl;
                options.ClaimsIssuer = APIClient.IdpUrl;
                options.SupportedTokens = SupportedTokens.Jwt;
@@ -74,7 +74,7 @@ namespace Gateway
                     .AllowAnyMethod()
                     .AllowAnyHeader()
                     );
-            app.UseSwaggerForOcelotUI(Configuration, InnerSaceAPI);
+            app.UseSwaggerForOcelotUI(Configuration, ApiDetails);
             app.UseOcelot()
                .Wait();
           

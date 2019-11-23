@@ -1,16 +1,23 @@
+using System.Globalization;
 using System.Reflection;
+using IdentityServer.Configurations;
+using IdentityServer.Configurations.ApplicationParts;
 using IdentityServer.Data;
+using IdentityServer.Helpers;
+using IdentityServer.Helpers.Localization;
 using IdentityServer4.Models; 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
  
 
-namespace InnerSpace.IdentityServer
+namespace IdentityServer 
 {
     public class Startup
     {
@@ -24,7 +31,7 @@ namespace InnerSpace.IdentityServer
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddStandardLocalization();
 
             string connectionStringIdentity =
                             Configuration.GetConnectionString("ConnectionStringIdentity");
@@ -35,11 +42,13 @@ namespace InnerSpace.IdentityServer
             services.AddDbContext<ApplicationDbContext>(builder =>
             builder.UseSqlServer(connectionStringIdentity, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)));
 
-            services.AddIdentity<IdentityUser, IdentityRole>().AddRoles<IdentityRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>().AddRoles<IdentityRole>()
                  .AddEntityFrameworkStores<ApplicationDbContext>() 
                  .AddDefaultTokenProviders();
+            
+            services.AddEmailSenders(Configuration);
 
-             services.AddIdentityServer().AddDeveloperSigningCredential()
+            services.AddIdentityServer().AddDeveloperSigningCredential()
                 
                .AddOperationalStore(options =>
                {
@@ -50,14 +59,14 @@ namespace InnerSpace.IdentityServer
                }).AddConfigurationStore(options =>
                          options.ConfigureDbContext = builder =>
                          builder.UseSqlServer(connectionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)))
-               .AddAspNetIdentity<IdentityUser>();
+               .AddAspNetIdentity<ApplicationUser>();
 
             
             services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,RoleManager<IdentityRole> roleManager, UserManager<IdentityUser> userManager)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
         {
             if (env.IsDevelopment())
             {
@@ -71,6 +80,7 @@ namespace InnerSpace.IdentityServer
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.ConfigureLocalization();
             app.UseIdentityServer();
             app.UseRouting();
             app.UseCors(builder =>
@@ -79,8 +89,7 @@ namespace InnerSpace.IdentityServer
                    .AllowAnyMethod()
                    .AllowAnyHeader()
                    );
-            app.UseAuthorization();
-            
+            app.UseAuthorization(); 
             ApplicationDbInitializer.SeedUsers(roleManager, userManager);
             app.UseEndpoints(endpoints =>
             {

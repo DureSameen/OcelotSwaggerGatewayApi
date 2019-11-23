@@ -23,7 +23,7 @@ namespace Gateway.Middleware
         /// </returns>
         public static IApplicationBuilder UseSwaggerForOcelotUI(
            this IApplicationBuilder app,
-           IConfiguration configuration, InnerSaceAPI api)
+           IConfiguration configuration, ApiDetails api)
             => app.UseSwaggerForOcelotUI(configuration, null, api);
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Gateway.Middleware
         public static IApplicationBuilder UseSwaggerForOcelotUI(
             this IApplicationBuilder app,
             IConfiguration configuration,
-            Action<SwaggerForOCelotUIOptions> setupAction, InnerSaceAPI api)
+            Action<SwaggerForOCelotUIOptions> setupAction, ApiDetails api)
         {
             var options = new SwaggerForOCelotUIOptions();
             setupAction?.Invoke(options);
@@ -67,7 +67,7 @@ namespace Gateway.Middleware
             }
         }
 
-        private static void InitUIOption(SwaggerUIOptions c, SwaggerForOCelotUIOptions options,   InnerSaceAPI api)
+        private static void InitUIOption(SwaggerUIOptions c, SwaggerForOCelotUIOptions options,   ApiDetails api)
         {
             c.ConfigObject = options.ConfigObject;
             c.DocumentTitle = options.DocumentTitle;

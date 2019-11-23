@@ -12,8 +12,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Linq;
 using System.Threading.Tasks;
+using IdentityServer.ViewModels.Account;
 
-namespace IdentityServer4.Quickstart.UI
+namespace IdentityServer.Quickstart.UI
 {
     /// <summary>
     /// This controller processes the consent UI
