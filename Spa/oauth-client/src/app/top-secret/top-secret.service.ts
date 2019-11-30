@@ -23,6 +23,6 @@ export class TopSecretService extends BaseService {
       })
     };
 
-      return this.http.get(this.configService.OcelotApiURI + '/api/user/', httpOptions).pipe(catchError(this.handleError));
+      return this.http.get(this.configService.OcelotApiURI + '/user/', httpOptions).pipe(catchError(this.handleError));
   }
 }

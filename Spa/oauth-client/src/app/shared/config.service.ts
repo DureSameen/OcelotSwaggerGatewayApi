@@ -14,6 +14,9 @@ export class ConfigService {
     }
 
     get OcelotApiURI() {
-        return 'http://localhost:59714/';
+        return 'http://localhost:59714/api';
+    }
+    get paymentApiUri() {
+        return 'https://localhost:44378/api';
     }
 }

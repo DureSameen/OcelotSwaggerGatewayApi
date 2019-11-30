@@ -19,6 +19,7 @@ import { HomeModule }  from './home/home.module';
 import { AccountModule }  from './account/account.module';
 import { ShellModule } from './shell/shell.module';
 import { TopSecretModule } from './top-secret/top-secret.module';
+import { ShoppingModule } from './shopping/shopping.module';
 import { SharedModule }   from './shared/shared.module';
 
 @NgModule({
@@ -32,7 +33,8 @@ import { SharedModule }   from './shared/shared.module';
     CoreModule,
     HomeModule,
     AccountModule,
-    TopSecretModule,   
+      TopSecretModule,
+      ShoppingModule,
     AppRoutingModule,
     ShellModule,   
     SharedModule    

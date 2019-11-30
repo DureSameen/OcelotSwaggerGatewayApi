@@ -3,6 +3,8 @@ using System.Reflection;
 using IdentityServer.Configurations;
 using IdentityServer.Configurations.ApplicationParts;
 using IdentityServer.Data;
+using IdentityServer.Data.Factory;
+using IdentityServer.Data.Services;
 using IdentityServer.Helpers;
 using IdentityServer.Helpers.Localization;
 using IdentityServer4.Models; 
@@ -32,7 +34,8 @@ namespace IdentityServer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddStandardLocalization();
-
+            //services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, ApplicationUserClaimsPrincipalFactory<ApplicationUser, IdentityRole>>();
+            services.AddScoped<ApplicationUserClaimsPrincipalFactory<ApplicationUser, IdentityRole>>();
             string connectionStringIdentity =
                             Configuration.GetConnectionString("ConnectionStringIdentity");
             string connectionString = Configuration.GetConnectionString("ConnectionStringConfiguration");
@@ -47,21 +50,29 @@ namespace IdentityServer
                  .AddDefaultTokenProviders();
             
             services.AddEmailSenders(Configuration);
+            string idpUrl = Configuration.GetSection("Authentication:IdentityServerAddress")?.Value;
+            services.AddIdentityServer(options =>
+            {
+                options.Events.RaiseErrorEvents = true;
+                options.Events.RaiseInformationEvents = true;
+                options.Events.RaiseFailureEvents = true;
+                options.Events.RaiseSuccessEvents = true;
+                options.IssuerUri = idpUrl;
+            }).AddDeveloperSigningCredential()
 
-            services.AddIdentityServer().AddDeveloperSigningCredential()
-                
                .AddOperationalStore(options =>
                {
-                   options.ConfigureDbContext = builder => builder.UseSqlServer(connectionString ,sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly));
-                    
+                   options.ConfigureDbContext = builder => builder.UseSqlServer(connectionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly));
+
                    options.EnableTokenCleanup = true;
-                   options.TokenCleanupInterval = 30;  
+                   options.TokenCleanupInterval = 30;
                }).AddConfigurationStore(options =>
                          options.ConfigureDbContext = builder =>
                          builder.UseSqlServer(connectionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)))
-               .AddAspNetIdentity<ApplicationUser>();
+               .AddAspNetIdentity<ApplicationUser>()
+               .AddProfileService<ProfileService<ApplicationUser>>();
 
-            
+
             services.AddCors();
         }
 

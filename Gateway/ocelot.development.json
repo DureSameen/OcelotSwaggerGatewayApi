@@ -1,5 +1,26 @@
 ﻿{
   "ReRoutes": [
+
+    {
+      "DownstreamPathTemplate": "/api/order/",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 44378
+        }
+      ],
+      "UpstreamPathTemplate": "/api/order/",
+      "UpstreamHttpMethod": [
+        "Get",
+        "Post",
+        "Put",
+        "Patch",
+        "Delete"
+      ],
+      "SwaggerKey": "paymentsvc"
+
+    },
     // Authentication Routes
     {
       "DownstreamPathTemplate": "/api/user/",
@@ -12,7 +33,7 @@
       ],
       "UpstreamPathTemplate": "/api/user/",
       "UpstreamHttpMethod": [ "Get" ],
-      "SwaggerKey": "usersvc" 
+      "SwaggerKey": "usersvc"
       //"AuthenticationOptions": {
       //  "AuthenticationProviderKey": "ID4",
       //  "AllowedScopes": [ "user_read_only" ]

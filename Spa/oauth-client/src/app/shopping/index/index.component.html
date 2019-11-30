@@ -1,0 +1,10 @@
+<div class="container">
+    <div class="row">
+      <div *ngIf="!busy" class="col-md-8">
+        <h3>Shopping Cart</h3>
+
+        <button class="btn btn-lg btn-primary" (click)="order()">CheckOut</button>
+      </div>
+    </div>
+    <ngx-spinner></ngx-spinner>  
+</div>

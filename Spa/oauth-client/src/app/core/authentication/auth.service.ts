@@ -52,7 +52,15 @@ export class AuthService extends BaseService  {
 
   get name(): string {
     return this.user != null ? this.user.profile.name : '';
-  }
+  } 
+
+ get userId(): string {
+        return this.user != null ? this.user.profile.sub : '';
+ }
+
+get tenantId(): string {
+        return this.user != null ? this.user.profile.sub : '';
+    }
 
   signout() {
     this.manager.signoutRedirect();
